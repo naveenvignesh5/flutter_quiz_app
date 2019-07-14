@@ -1,21 +1,54 @@
 import 'package:flutter/material.dart';
 
+import 'quiz.dart';
+import 'result.dart';
+
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  int questionIndex = 0;
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _MyAppState();
+  }
+}
 
-  void answerQuestion() {
-    questionIndex += 1;
-    print(questionIndex);
+class _MyAppState extends State<MyApp> {
+  final _questions = const [
+    {
+      'questionText': 'What\'s your favorite color ?',
+      'answers': ['Black', 'Red', 'Green', 'White'],
+    },
+    {
+      'questionText': 'What\'s your favorite animal ?',
+      'answers': ['Dog', 'Cat', 'Mouse', 'Lion'],
+    },
+    {
+      'questionText': 'What\'s your favorite place ?',
+      'answers': [
+        'Paris',
+        'Rome',
+        'Berlin',
+        'London',
+        'Copenhagen',
+      ],
+    },
+  ];
+
+  int _questionIndex = 0;
+
+  void _answerQuestion() {
+    if (_questionIndex < _questions.length) {
+    } else {}
+    setState(() {
+      _questionIndex += 1;
+    });
+    print(_questionIndex);
   }
 
   @override
   Widget build(BuildContext context) {
-    const questions = [
-      'What\'s your favorite color ?',
-      'What\'s your favorite animal ?',
-    ];
+    // _questions = []; won't change if _questions is const
+
     return MaterialApp(
       // title: 'Quiz App',
       home: Scaffold(
@@ -23,25 +56,9 @@ class MyApp extends StatelessWidget {
           title: Text('Quiz App'),
           // backgroundColor: new Color(),
         ),
-        body: Column(
-          children: <Widget>[
-            Text(questions.elementAt(questionIndex)),
-            RaisedButton(
-              child: Text('Answer 1'),
-              onPressed: () {
-                answerQuestion();
-              },
-            ),
-            RaisedButton(
-              child: Text('Answer 2'),
-              onPressed: () => answerQuestion(),
-            ),
-            RaisedButton(
-              child: Text('Answer 3'),
-              onPressed: () => answerQuestion(),
-            ),
-          ],
-        ),
+        body: _questionIndex < _questions.length
+            ? Quiz(answerQuestion: _answerQuestion, questionIndex: _questionIndex, questions: _questions,)
+            : Result()
       ),
     );
   }
