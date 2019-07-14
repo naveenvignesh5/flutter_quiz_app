@@ -16,33 +16,47 @@ class _MyAppState extends State<MyApp> {
   final _questions = const [
     {
       'questionText': 'What\'s your favorite color ?',
-      'answers': ['Black', 'Red', 'Green', 'White'],
+      'answers': [
+        {'text': 'Black', 'score': 10},
+        {'text': 'Red', 'score': 5},
+        {'text': 'Green', 'score': 2},
+        {'text': 'White', 'score': 1},
+      ],
     },
     {
       'questionText': 'What\'s your favorite animal ?',
-      'answers': ['Dog', 'Cat', 'Mouse', 'Lion'],
+      'answers': [
+        {'text': 'Dog', 'score': 2},
+        {'text': 'Cat', 'score': 3},
+        {'text': 'Mouse', 'score': 10},
+        {'text': 'Snake', 'score': 15},
+      ],
     },
     {
       'questionText': 'What\'s your favorite place ?',
       'answers': [
-        'Paris',
-        'Rome',
-        'Berlin',
-        'London',
-        'Copenhagen',
+        {'text': 'Paris', 'score': 2},
+        {'text': 'Rome', 'score': 3},
+        {'text': 'Berlin', 'score': 10},
+        {'text': 'London', 'score': 9},
       ],
     },
   ];
 
   int _questionIndex = 0;
+  int _totalScore = 0;
 
-  void _answerQuestion() {
-    if (_questionIndex < _questions.length) {
-    } else {}
+  void _answerQuestion(int score) {
+    _totalScore += score;
     setState(() {
       _questionIndex += 1;
     });
-    print(_questionIndex);
+  }
+
+  void _resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+    });
   }
 
   @override
@@ -52,14 +66,17 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       // title: 'Quiz App',
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Quiz App'),
-          // backgroundColor: new Color(),
-        ),
-        body: _questionIndex < _questions.length
-            ? Quiz(answerQuestion: _answerQuestion, questionIndex: _questionIndex, questions: _questions,)
-            : Result()
-      ),
+          appBar: AppBar(
+            title: Text('Quiz App'),
+            // backgroundColor: new Color(),
+          ),
+          body: _questionIndex < _questions.length
+              ? Quiz(
+                  answerQuestion: _answerQuestion,
+                  questionIndex: _questionIndex,
+                  questions: _questions,
+                )
+              : Result(_totalScore, _resetQuiz)),
     );
   }
 }
